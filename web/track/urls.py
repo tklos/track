@@ -8,6 +8,7 @@ urlpatterns = [
 
     path('account/', include('accounts.urls')),
     path('profile/', include('profiles.urls')),
+    path('devices/', include('devices.urls')),
 
     path('django-admin/', admin.site.urls),
 ]

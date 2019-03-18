@@ -1,0 +1,20 @@
+
+<form method="post" action="{% url 'devices:add' %}">
+    {% csrf_token %}
+    <table class="table table-condensed table-no-border width-auto table-td-vertical-align-middle">
+        <tr>
+			<td>{{form.name.label_tag}}</td>
+			<td>{{form.name}}</td>
+		</tr>
+        {% if form.errors %}
+            {% include "common/form_errors.html" with form=form colspan=2 only %}
+        {% endif %}
+		<tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+            </td>
+        </tr>
+	</table>
+</form>
+
