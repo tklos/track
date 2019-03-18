@@ -1,0 +1,43 @@
+{% extends "common/base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+
+<form method="POST" action="{% url 'account:register' %}">
+	{% csrf_token %}
+	<table class="table table-condensed table-no-border width-auto table-center table-td-vertical-align-middle">
+		<tr>
+			<td>{{form.username.label_tag}}</td>
+			<td>{{form.username}}</td>
+			<td class="width-td-large"></td>
+		</tr>
+		<tr>
+			<td>{{form.password1.label_tag}}</td>
+			<td>{{form.password1}}</td>
+		</tr>
+		<tr>
+			<td>{{form.password2.label_tag}}</td>
+			<td>{{form.password2}}</td>
+		</tr>
+		<tr>
+			<td colspan="3" class="td-ul-no-margin-bottom">
+				{{form.username.help_text|safe}}
+				{{form.password1.help_text|safe}}
+			</td>
+		</tr>
+		{% if form.errors %}
+			{% include "common/form_errors.html" with form=form colspan=3 only %}
+		{% endif %}
+		<tr>
+			<td></td>
+			<td>
+				<input type="submit" value="Submit" class="btn btn-primary"/>
+			</td>
+		</tr>
+	</table>
+</form>
+
+{% endblock %}
+

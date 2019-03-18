@@ -1,0 +1,50 @@
+{% extends "common/base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+
+{% if not user.is_authenticated and next %}
+	<div class="alert alert-danger">
+		Please login to see this page
+	</div>
+{% endif %}
+
+
+{% load static %}
+
+
+<form method="post" action="{% url 'account:login' %}">
+	{% csrf_token %}
+	{{form.utc_offset}}
+	<table class="table table-condensed table-no-border width-auto table-center table-td-vertical-align-middle">
+		<tr>
+			<td>{{form.username.label_tag}}</td>
+			<td>{{form.username}}</td>
+		</tr>
+		<tr>
+			<td>{{form.password.label_tag}}</td>
+			<td>{{form.password}}</td>
+		</tr>
+		{% if form.errors %}
+			{% include "common/form_errors.html" with form=form colspan=2 only %}
+		{% endif %}
+		<tr>
+			<td></td>
+			<td>
+				<input type="hidden" name="next" value="{{next}}"/>
+				<input type="submit" value="Login" class="btn btn-primary pull-right"/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><div class="margin-bottom-10px"></div></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="horizontal-align-center">or<br/><a class="btn btn-primary" href="{% url 'account:register' %}">Register</a></td>
+		</tr>
+	</table>
+</form>
+
+{% endblock %}
+
