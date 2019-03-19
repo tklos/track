@@ -1,11 +1,14 @@
+import csv
 import string
 import random
 
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView, CreateView, DetailView
+from django.views.generic.detail import BaseDetailView
 
 from .models import Device
 from .forms import DeviceAddForm
@@ -70,4 +73,22 @@ class DeviceView(DetailView):
         })
 
         return context
+
+
+class DeviceDownloadCsvView(BaseDetailView):
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device.objects, user=self.request.user, sequence_id=self.kwargs['d_sid'])
+
+    def render_to_response(self, context, **response_kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['Date collected', 'Latitude', 'Longitude'])
+
+        for m in self.object.gps_measurement_set.all().order_by('date_collected'):
+            writer.writerow([m.date_collected, m.latitude, m.longitude])
+
+        return response
 

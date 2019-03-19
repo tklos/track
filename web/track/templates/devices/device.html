@@ -9,6 +9,8 @@
 <h1>Device {{object.name}}</h1>
 
 <h2>Data</h2>
+	<a href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
+
 	<table class="table table-bordered table-condensed no-margin-bottom table-td-vertical-align-middle">
 		<tr><th>ID</th><th>Date collected</th><th>Latitude</th><th>Longitude</th><th>Date received</th></tr>
 		{% for ind, m in gps_measurements %}
