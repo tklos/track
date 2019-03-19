@@ -61,3 +61,13 @@ class DeviceView(DetailView):
     def get_object(self, queryset=None):
         return get_object_or_404(Device.objects, user=self.request.user, sequence_id=self.kwargs['d_sid'])
 
+    def get_context_data(self, **kwargs):
+        gps_measurements = self.object.gps_measurement_set.all()
+
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'gps_measurements': zip(range(gps_measurements.count(), 0, -1), gps_measurements),
+        })
+
+        return context
+

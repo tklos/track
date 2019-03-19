@@ -1,14 +1,29 @@
 {% extends "common/base.html" %}
 
-{% block title %}
-{% endblock %}
+{% block title %}Device {{object.name}}{% endblock %}
 
 
 {% block content %}
 
 
-<h1>Device</h1>
+<h1>Device {{object.name}}</h1>
 
+<h2>Data</h2>
+	<table class="table table-bordered table-condensed no-margin-bottom table-td-vertical-align-middle">
+		<tr><th>ID</th><th>Date collected</th><th>Latitude</th><th>Longitude</th><th>Date received</th></tr>
+		{% for ind, m in gps_measurements %}
+			<tr>
+				<td>{{ind}}</td>
+				<td>{{m.date_collected|date:'Y-m-d H:i:s'}}</td>
+				<td>{{m.latitude}}</td>
+				<td>{{m.longitude}}</td>
+				<td>{{m.date_received|date:'Y-m-d H:i:s'}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+<div class="margin-bottom-200px"></div>
 
 {% endblock %}
 

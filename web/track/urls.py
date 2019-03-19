@@ -11,5 +11,7 @@ urlpatterns = [
     path('devices/', include('devices.urls')),
 
     path('django-admin/', admin.site.urls),
+
+    path('api/measurements/', include('measurements.api.urls')),
 ]
 

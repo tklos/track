@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Max
 from django.db.models.functions import Coalesce
 
+from .functions import calculate_hash
 from . import const
 
 
@@ -28,6 +29,9 @@ class Device(models.Model):
 
     def get_api_key_display(self):
         return '{}{}'.format(self.token, '*' * (const.DEVICE_API_KEY_LEN - const.DEVICE_TOKEN_LEN))
+
+    def is_matching_api_key(self, api_key):
+        return calculate_hash(api_key, self.salt) == self.api_key_hash
 
     def save(self, *args, **kwargs):
         if self.pk is None:
