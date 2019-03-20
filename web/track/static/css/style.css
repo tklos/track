@@ -1,0 +1,310 @@
+/* Navbar */
+.navbar-register {
+	color: #9d9d9d;
+	border: 1px solid #9d9d9d;
+}
+
+.navbar-register:hover {
+	color: #222;
+	background: #9d9d9d;
+}
+
+.navbar-primary {
+	color: #609dd2;
+	font-weight: bold;
+	background-color: transparent;
+	border: 1.3px solid #609dd2;
+}
+
+.navbar-primary:hover {
+	color: #609dd2;
+	background: #224f77;
+}
+
+.p-navbar-primary-btn  {
+	padding: 0px 0px 0px 15px;
+	margin-top: 7.5px;
+	margin-bottom: 7.5px;
+}
+
+.navbar-inverse .navbar-brand {
+	color: #e6e6e6;
+}
+
+.navbar-brand > img {
+	height: 100%;
+	width: auto;
+}
+
+
+/* Table */
+table.table-no-border > tbody > tr > td, table.table-no-border > tbody > tr > th {
+	border: none !important;
+}
+
+table.table-center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table.table-td-vertical-align-middle > tbody > tr > td, table.table-td-vertical-align-middle > tbody > tr > th {
+	vertical-align: middle !important;
+}
+
+table.table-td-no-padding > tbody > tr > td, table.table-td-no-padding > tbody > tr > th {
+	padding: 0px;
+}
+
+table.table-td-padding-right-st > tbody > tr > td {
+	padding-right: 10px;
+}
+
+.checkbox-margin {
+	margin-top: 6px !important;
+}
+
+table.table-td-padding-right-sm > tbody > tr > td, table.table-td-padding-right-sm > tbody > tr > th {
+	padding-right: 5px !important;
+}
+
+table.table-td-padding-right-st > tbody > tr > td, table.table-td-padding-right-st > tbody > tr > th {
+	padding-right: 10px !important;
+}
+
+td.padding-right-sm {
+	padding-right: 5px !important;
+}
+
+td.padding-left-sm {
+	padding-left: 5px !important;
+}
+
+td.padding-right-st {
+	padding-right: 10px !important;
+}
+
+td.padding-left-st {
+	padding-left: 10px !important;
+}
+
+td.padding-right-5.override {
+	padding-right: 5px !important;
+}
+
+td.padding-right-20.override {
+	padding-right: 20px !important;
+}
+
+td.padding-right-30.override {
+	padding-right: 30px !important;
+}
+
+table.curr-table-padding {
+	margin-bottom: 20px;
+}
+
+table.curr-table-padding > tbody > tr > td, table.curr-table-padding > tbody > tr > th {
+	padding-left: 10px;
+	padding-right: 10px;
+/*	padding-left: 0px;
+	padding-right: 30px;
+	padding-top: 1px;
+	padding-bottom: 1px;*/
+}
+
+.table-inactive {
+	background-color: #ececec;
+}
+
+div.div-filter {
+	border: 1px solid #999999;
+	border-radius: 10px;
+	padding: 5px;
+}
+
+
+/* Other */
+.monospace {
+	font-family: monospace;
+}
+
+label {
+	margin-bottom: 0px;
+}
+
+.width-auto {
+	width: auto;
+}
+
+.width-full {
+	width: 100%;
+}
+
+.width-1px {
+	width: 1px;
+}
+
+.width-td-large {
+	width: 250px;
+}
+
+.no-padding {
+	padding: 0px !important;
+}
+
+.no-padding-left {
+	padding-left: 0px !important;
+}
+
+.margin-right-st {
+	margin-right: 5px;
+}
+
+.no-margin {
+	margin: 0px !important;
+}
+
+.no-margin-bottom {
+	margin-bottom: 0px;
+}
+
+.margin-bottom-5px {
+	margin-bottom: 5px;
+}
+
+.margin-bottom-10px {
+	margin-bottom: 10px !important;
+}
+
+.margin-bottom-20px {
+	margin-bottom: 20px;
+}
+
+.margin-bottom-40px {
+	margin-bottom: 40px;
+}
+
+.margin-bottom-100px {
+	margin-bottom: 100px;
+}
+
+.margin-bottom-200px {
+	margin-bottom: 200px;
+}
+
+.margin-top-5 {
+	margin-top: 5px;
+}
+
+.float-left {
+	float: left;
+}
+
+.display-block {
+	display: block;
+}
+
+.display-none {
+	display: none;
+}
+
+.horizontal-align-center {
+	text-align: center;
+}
+
+.horizontal-align-right {
+	text-align: right;
+}
+
+.no-border-left-right-bottom {
+	border-left-style: hidden !important;
+	border-right-style: hidden !important;
+	border-bottom-style: hidden !important;
+}
+
+.no-border-right-top-bottom {
+	border-right-style: hidden !important;
+	border-top-style: hidden !important;
+	border-bottom-style: hidden !important;
+}
+
+.no-border-top-left {
+	border-top-style: hidden !important;
+	border-left-style: hidden !important;
+}
+
+.no-border-right {
+	border-right-style: hidden !important;
+}
+
+.btn-padding-tb-sm {
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	padding-left: 7.5px;
+	padding-right: 7.5px;
+}
+
+.btn-padding-switch-panels {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.visibility-hidden {
+	visibility: hidden;
+}
+
+.spacing {
+	display: inline-block;
+	width: 20px;
+}
+
+td.td-ul-no-margin-bottom ul {
+	margin-bottom: 0px;
+}
+
+div.ext-row-spacing {
+	padding-bottom: 10px;
+}
+
+.pagination-margins {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.input-font-size-14 {
+	font-size: 14px !important;
+}
+
+.input-padding-sm {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	height: 26px;
+}
+
+.padding-r-15 {
+	padding-right: 15px;
+}
+
+.font-lg {
+	font-size: 15px;
+}
+
+.font-normal {
+	font-size: 14px;
+}
+
+.div-tooltip-disabled-wrapper {
+	display: inline-block;
+	cursor: not-allowed;
+}
+
+.div-tooltip-disabled-wrapper .btn[disabled] {
+	pointer-events: none;
+}
+
+.vertical-align-bottom.td-vertical-align {
+	 vertical-align: bottom !important;
+}
+

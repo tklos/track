@@ -1,0 +1,33 @@
+{% extends "common/base.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+
+{% block content %}
+
+
+<h1>Devices</h1>
+	<table class="table table-bordered table-condensed no-margin-bottom table-td-vertical-align-middle">
+		<tr><th>ID</th><th>Name</th><th>API key</th><th class="width-1px">Action</th></tr>
+		{% for d in user.device_set.all %}
+			<tr>
+				<td>{{d.sequence_id}}</td>
+				<td>{{d.name}}</td>
+				<td>{{d.get_api_key_display}}</td>
+				<td><a class="btn btn-primary btn-padding-tb-sm" href="{% url 'devices:device' d_sid=d.sequence_id %}">View</a></td>
+			</tr>
+		{% endfor %}
+
+	</table>
+
+
+<h2>Add device</h2>
+	{% include 'devices/add_device.html' with form=device_add_form csrf_token=csrf_token only %}
+
+
+<div class="margin-bottom-200px"></div>
+
+{% endblock %}
+
