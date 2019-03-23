@@ -1,0 +1,9 @@
+#include "settings.h"
+
+
+HardwareSerial *gprs_serial = &Serial1;
+
+const char *apn = "(apn)";
+
+const char *post_url = "track.kupa.usermd.net/api/measurements/";
+const char *api_key = "(api-key)";
