@@ -1,7 +1,8 @@
 #include "settings.h"
 
 
-HardwareSerial *gprs_serial = &Serial1;
+HardwareSerial *serial_gprs = &Serial1;
+HardwareSerial *serial_gps = &Serial2;
 
 const char *apn = "(apn)";
 

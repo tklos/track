@@ -4,7 +4,13 @@
 #include <Arduino.h>
 
 
-extern HardwareSerial *gprs_serial;
+#define INTERVAL_GPS 20000
+
+#define TIMEOUT_GPS_GET_DATA 3000
+
+
+extern HardwareSerial *serial_gprs;
+extern HardwareSerial *serial_gps;
 
 extern const char *apn;
 
