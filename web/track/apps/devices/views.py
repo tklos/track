@@ -2,6 +2,7 @@ import csv
 import string
 import random
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
@@ -70,8 +71,10 @@ class DeviceGpsMeasurementsMixin:
         this_gps_measurements = gps_measurements_paginator.get_page(page)
 
         return {
-            'gps_measurements': this_gps_measurements,
-            'gps_measurements_ids': {gm.id: num_gps_measurements-this_gps_measurements.start_index()+1-ind for ind, gm in enumerate(this_gps_measurements)},
+            'gps_measurements': reversed(gps_measurements),
+
+            'table_gps_measurements': this_gps_measurements,
+            'table_gps_measurements_ids': {gm.id: num_gps_measurements-this_gps_measurements.start_index()+1-ind for ind, gm in enumerate(this_gps_measurements)},
             'extra': {'d_sid': device.sequence_id},
         }
 
@@ -86,6 +89,8 @@ class DeviceView(DeviceGpsMeasurementsMixin, DetailView):
         context = super().get_context_data(**kwargs)
         m_context = self.get_gps_measurements_context(self.object, 1)
         context.update(m_context)
+
+        context['maps_api_key'] = settings.MAPS_API_KEY
 
         return context
 

@@ -319,3 +319,7 @@ div.ext-row-spacing {
   padding-bottom: 3px;
 }
 
+#map {
+	height: 700px;
+}
+

@@ -16,11 +16,75 @@
 	<a class="btn-data-download" href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
 
 	<div class="div-ajax">
-		{% include "devices/device_gps_measurements.html" with gps_measurements=gps_measurements gps_measurements_ids=gps_measurements_ids extra=extra only %}
+		{% include "devices/device_gps_measurements.html" with gps_measurements=table_gps_measurements gps_measurements_ids=table_gps_measurements_ids extra=extra only %}
 	</div>
 
 
+<h2>Map</h2>
+	<div id="map"></div>
+
+
 <div class="margin-bottom-200px"></div>
+
+{% endblock %}
+
+
+{% block end-body %}
+
+<script>
+	function initMap() {
+		var gps_measurements = [
+			{% for m in gps_measurements %}[{{forloop.counter}},{{m.latitude}},{{m.longitude}},"{{m.date_collected|date:'Y-m-d H:i:s'}}"],{% endfor %}
+		];
+
+		var points = [];
+		for (var i = 0; i < gps_measurements.length; i++)
+			points.push({
+				lat: gps_measurements[i][1],
+				lng: gps_measurements[i][2],
+			});
+
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 7,
+			center: {lat: 42, lng: 13},
+		});
+
+		/* Path */
+		var path = new google.maps.Polyline({
+			path: points,
+			strokeColor: "#000000",
+			strokeOpacity: 1.0,
+			strokeWeight: 1,
+			map: map,
+		});
+
+		/* Markers */
+		var markers = [];
+		for (var i = 0; i < gps_measurements.length; i++)
+			markers.push(
+				new google.maps.Marker({
+					position: points[i],
+					info_window_content: "#" + gps_measurements[i][0] + ": " + gps_measurements[i][3],
+					map: map,
+				})
+			);
+		if (markers.length >= 2) {
+			markers[0].setLabel("S");
+			markers[markers.length-1].setLabel("E");
+		}
+
+		/* Info window */
+		var info_window = new google.maps.InfoWindow();
+		for (var i = 0; i < gps_measurements.length; i++) {
+			markers[i].addListener('click', function() {
+				info_window.setContent(this.info_window_content);
+				info_window.open(map, this);
+			});
+        }
+	}
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{maps_api_key}}&callback=initMap"></script>
 
 {% endblock %}
 
