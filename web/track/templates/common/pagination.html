@@ -1,0 +1,36 @@
+{% load pagination_tags %}
+
+
+{% with paginator=paginator_page.paginator page_number=paginator_page.number %}
+{% get_limited_page_range paginator page_number as page_range %}
+
+<ul class="pagination pagination-sm pagination-margins">
+    {% if paginator_page.has_previous %}
+        <li><a class="a-paginator" href="#" data-url="{% make_url ajax_url page=paginator_page.previous_page_number extra=extra %}">Prev</a></li>
+    {% else %}
+        <li class="disabled"><a class="disabled" href="#">Prev</a></li>
+    {% endif %}
+
+    <li><a class="a-paginator" href="#" data-url="{% make_url ajax_url page=1 extra=extra %}">First</a></li>
+    {% if page_range.0 != 1 %}
+        <li class="disabled"><a class="disabled" href="#">...</a></li>
+    {% endif %}
+
+    {% for page in page_range %}
+        <li {% if page == page_number %} class="active" {% endif %}><a class="a-paginator" href="#" data-url="{% make_url ajax_url page=page extra=extra %}">{{page}}</a></li>
+    {% endfor %}
+
+    {% if page_range|last != paginator.num_pages %}
+        <li class="disabled"><a class="disabled" href="#">...</a></li>
+    {% endif %}
+    <li><a class="a-paginator" href="#" data-url="{% make_url ajax_url page=paginator.num_pages extra=extra %}">Last</a></li>
+
+    {% if paginator_page.has_next %}
+        <li><a class="a-paginator" href="#" data-url="{% make_url ajax_url page=paginator_page.next_page_number extra=extra %}">Next</a></li>
+    {% else %}
+        <li class="disabled"><a class="disabled" href="#">Next</a></li>
+    {% endif %}
+</ul>
+
+{% endwith %}
+

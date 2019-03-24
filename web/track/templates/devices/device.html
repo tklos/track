@@ -9,20 +9,11 @@
 <h1>Device {{object.name}}</h1>
 
 <h2>Data</h2>
-	<a href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
+	<a class="btn-data-download" href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
 
-	<table class="table table-bordered table-condensed no-margin-bottom table-td-vertical-align-middle">
-		<tr><th>ID</th><th>Date collected</th><th>Latitude</th><th>Longitude</th><th>Date received</th></tr>
-		{% for ind, m in gps_measurements %}
-			<tr>
-				<td>{{ind}}</td>
-				<td>{{m.date_collected|date:'Y-m-d H:i:s'}}</td>
-				<td>{{m.latitude}}</td>
-				<td>{{m.longitude}}</td>
-				<td>{{m.date_received|date:'Y-m-d H:i:s'}}</td>
-			</tr>
-		{% endfor %}
-	</table>
+	<div class="div-ajax">
+		{% include "devices/device_gps_measurements.html" with gps_measurements=gps_measurements gps_measurements_ids=gps_measurements_ids extra=extra only %}
+	</div>
 
 
 <div class="margin-bottom-200px"></div>

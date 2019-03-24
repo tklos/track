@@ -308,3 +308,14 @@ div.ext-row-spacing {
 	 vertical-align: bottom !important;
 }
 
+.btn-data-download {
+	display: inline-block;
+	margin-bottom: 10px;
+	font-size: 15px;
+}
+
+.table-padding-3 > tbody > tr > td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+

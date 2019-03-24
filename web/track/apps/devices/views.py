@@ -3,7 +3,8 @@ import string
 import random
 
 from django.contrib import messages
-from django.http import HttpResponse
+from django.core.paginator import Paginator
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
@@ -58,19 +59,33 @@ class DeviceAddView(CreateView):
         return super().form_invalid(form)
 
 
-class DeviceView(DetailView):
+class DeviceGpsMeasurementsMixin:
+    PAGINATE_BY = 20
+
+    def get_gps_measurements_context(self, device, page):
+        gps_measurements = device.gps_measurement_set.all()
+        num_gps_measurements = gps_measurements.count()
+
+        gps_measurements_paginator = Paginator(gps_measurements, self.PAGINATE_BY)
+        this_gps_measurements = gps_measurements_paginator.get_page(page)
+
+        return {
+            'gps_measurements': this_gps_measurements,
+            'gps_measurements_ids': {gm.id: num_gps_measurements-this_gps_measurements.start_index()+1-ind for ind, gm in enumerate(this_gps_measurements)},
+            'extra': {'d_sid': device.sequence_id},
+        }
+
+
+class DeviceView(DeviceGpsMeasurementsMixin, DetailView):
     template_name = 'devices/device.html'
 
     def get_object(self, queryset=None):
         return get_object_or_404(Device.objects, user=self.request.user, sequence_id=self.kwargs['d_sid'])
 
     def get_context_data(self, **kwargs):
-        gps_measurements = self.object.gps_measurement_set.all()
-
         context = super().get_context_data(**kwargs)
-        context.update({
-            'gps_measurements': zip(range(gps_measurements.count(), 0, -1), gps_measurements),
-        })
+        m_context = self.get_gps_measurements_context(self.object, 1)
+        context.update(m_context)
 
         return context
 
@@ -82,7 +97,7 @@ class DeviceDownloadCsvView(BaseDetailView):
 
     def render_to_response(self, context, **response_kwargs):
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        response['Content-Disposition'] = 'attachment; filename="gps-measurements.csv"'
 
         writer = csv.writer(response)
         writer.writerow(['Date collected', 'Latitude', 'Longitude'])
@@ -91,4 +106,29 @@ class DeviceDownloadCsvView(BaseDetailView):
             writer.writerow([m.date_collected, m.latitude, m.longitude])
 
         return response
+
+
+class PaginationGpsMeasurementsView(DeviceGpsMeasurementsMixin, TemplateView):
+    template_name = 'devices/device_gps_measurements.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        assert request.is_ajax(), 'Ajax request expected'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, d_sid, page, **kwargs):
+        device = Device.objects.get(user=self.request.user, sequence_id=d_sid)
+
+        context = super().get_context_data(**kwargs)
+        m_context = self.get_gps_measurements_context(device, page)
+        context.update(m_context)
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+
+        data = {
+            'html': response.rendered_content,
+        }
+        return JsonResponse(data)
 

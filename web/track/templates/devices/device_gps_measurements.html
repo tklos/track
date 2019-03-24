@@ -1,0 +1,19 @@
+
+{% load common_tags %}
+
+
+<table class="table table-bordered table-condensed table-padding-3 no-margin-bottom table-td-vertical-align-middle table-ajax">
+	<tr><th>ID</th><th>Date collected</th><th>Latitude</th><th>Longitude</th><th>Date received</th></tr>
+	{% for m in gps_measurements %}
+		<tr>
+			<td>{{gps_measurements_ids|get_at_index:m.id}}</td>
+			<td>{{m.date_collected|date:'Y-m-d H:i:s'}}</td>
+			<td>{{m.latitude}}</td>
+			<td>{{m.longitude}}</td>
+			<td>{{m.date_received|date:'Y-m-d H:i:s'}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+{% include "common/pagination.html" with paginator_page=gps_measurements ajax_url="devices:pagination-gps-measurements" extra=extra only %}
+
