@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
-from django.views.generic import TemplateView, CreateView, DetailView
+from django.views.generic import TemplateView, CreateView, DetailView, DeleteView
 from django.views.generic.detail import BaseDetailView
 
 from .models import Device
@@ -88,6 +88,20 @@ class DeviceView(DeviceGpsMeasurementsMixin, DetailView):
         context.update(m_context)
 
         return context
+
+
+class DeviceDeleteView(DeleteView):
+    success_url = reverse_lazy('profile:home')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device.objects, user=self.request.user, sequence_id=self.kwargs['d_sid'])
+
+    def post(self, request, *args, **kwargs):
+        ret = super().post(request, *args, **kwargs)
+
+        messages.success(self.request, 'Device {} deleted'.format(self.object.name))
+
+        return ret
 
 
 class DeviceDownloadCsvView(BaseDetailView):

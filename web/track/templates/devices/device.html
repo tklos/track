@@ -5,8 +5,12 @@
 
 {% block content %}
 
-
 <h1>Device {{object.name}}</h1>
+	<form method="post" action="{% url 'devices:delete' d_sid=object.sequence_id %}">
+		{% csrf_token %}
+		<input type="submit" value="Delete device" class="btn btn-danger"/>
+	</form>
+
 
 <h2>Data</h2>
 	<a class="btn-data-download" href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
