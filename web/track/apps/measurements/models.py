@@ -5,8 +5,8 @@ from devices.models import Device
 
 class GpsMeasurement(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='gps_measurement_set')
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
     date_collected = models.DateTimeField()
     date_received = models.DateTimeField(auto_now_add=True)
 
