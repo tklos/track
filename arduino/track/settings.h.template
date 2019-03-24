@@ -1,0 +1,21 @@
+#ifndef __settings_h__
+#define __settings_h__
+
+#include <Arduino.h>
+
+
+#define INTERVAL_GPS 20000
+
+#define TIMEOUT_GPS_GET_DATA 3000
+
+
+extern HardwareSerial *serial_gprs;
+extern HardwareSerial *serial_gps;
+
+extern const char *apn;
+
+extern const char *post_url;
+extern const char *api_key;
+
+
+#endif

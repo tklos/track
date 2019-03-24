@@ -2,6 +2,9 @@
 *.pyc
 __pycache__/
 
+/arduino/track/settings.*
+!/arduino/track/settings.*.template
+
 /web/env/
 
 /web/track/settings/secrets_*
