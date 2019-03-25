@@ -47,7 +47,7 @@ void metro_loop_gps() {
 	double lng = gps.location.lng();
 
 	char data[90];
-	sprintf(data, "{\"lat\": %d.%06ld, \"long\": %d.%06ld, \"date\": \"%04d:%02d:%02dT%02d:%02d:%02dZ\"}",
+	sprintf(data, "{\"lat\": %d.%06ld, \"long\": %d.%06ld, \"date\": \"%04d-%02d-%02dT%02d:%02d:%02dZ\"}",
 			int(lat), (long)((lat - (int)lat) * 1000000),
 			int(lng), (long)((lng - (int)lng) * 1000000),
 			gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second());
