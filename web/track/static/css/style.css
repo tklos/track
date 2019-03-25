@@ -308,3 +308,23 @@ div.ext-row-spacing {
 	 vertical-align: bottom !important;
 }
 
+.btn-data-download {
+	display: inline-block;
+	margin-bottom: 10px;
+	font-size: 15px;
+}
+
+.table-padding-3 > tbody > tr > td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+#map {
+	/* height: 700px; */
+}
+
+#map-checkbox {
+	margin: 0px 7px 4px 0px !important;
+	vertical-align: middle !important;
+}
+
