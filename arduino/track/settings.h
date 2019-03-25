@@ -4,13 +4,12 @@
 #include <Arduino.h>
 
 
-#define INTERVAL_GPS 20000
-
-#define TIMEOUT_GPS_GET_DATA 3000
-
-
 extern HardwareSerial *serial_gprs;
 extern HardwareSerial *serial_gps;
+
+extern const unsigned long interval_gps;
+
+extern const unsigned long timeout_gps_get_data;
 
 extern const char *apn;
 
@@ -19,6 +18,7 @@ extern const char *api_key;
 
 extern const int sd_chip_select;
 extern const char *sd_measurements_filename;
+extern const char *sd_log_filename;
 
 
 #endif
