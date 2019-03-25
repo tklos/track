@@ -4,11 +4,14 @@
 
 #include "settings.h"
 #include "gprs.h"
+#include "sd.h"
 
 #define DELAY_INITIAL 2000
 
 
 Gprs gprs = Gprs(serial_gprs, 9600, apn, true);
+
+SdLog sdlog = SdLog(sd_log_filename);
 
 Metro metro_gps = Metro(INTERVAL_GPS);
 Metro metro_gprs = Metro(30000);
@@ -32,6 +35,8 @@ void setup() {
 void metro_loop_gps() {
 	unsigned long start_time = millis();
 
+	sdlog.log("\n"); sdlog.log_time(start_time); sdlog.log(" GPS");
+
 	TinyGPSPlus gps;
 
 	while (1) {
@@ -45,7 +50,7 @@ void metro_loop_gps() {
 			continue;
 
 		char c = serial_gps->read();
-		Serial.print(c);
+//		Serial.print(c);
 		gps.encode(c);
 	}
 
@@ -59,6 +64,7 @@ void metro_loop_gps() {
 			gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second());
 
 	Serial.println(data);
+	sdlog.log(data);
 
 
 	/* Save to SD card */
@@ -70,7 +76,6 @@ void metro_loop_gps() {
 
     file.println(data);
     file.close();
-
 
 //	bool ret = gprs.send_post(post_url, api_key, data);
 //	Serial.print("Success?: "); Serial.println(ret);
