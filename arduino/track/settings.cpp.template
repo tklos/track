@@ -8,3 +8,6 @@ const char *apn = "(apn)";
 
 const char *post_url = "track.kupa.usermd.net/api/measurements/";
 const char *api_key = "(api-key)";
+
+const int sd_chip_select = 53;
+extern const char *sd_measurements_filename = "measmnts.txt";

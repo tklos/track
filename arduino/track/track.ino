@@ -1,5 +1,6 @@
 #include <Metro.h>
 #include <TinyGPS++.h>
+#include <SD.h>
 
 #include "settings.h"
 #include "gprs.h"
@@ -15,11 +16,16 @@ Metro metro_gprs = Metro(30000);
 
 
 void setup() {
+	delay(DELAY_INITIAL);
+
 	Serial.begin(9600);
 
 	serial_gps->begin(9600);
 
-	delay(DELAY_INITIAL);
+	if (!SD.begin(sd_chip_select)) {
+		Serial.println("Can't initialise SD card");
+		while (1) ;
+	}
 }
 
 
@@ -54,8 +60,20 @@ void metro_loop_gps() {
 
 	Serial.println(data);
 
-	bool ret = gprs.send_post(post_url, api_key, data);
-	Serial.print("Success?: "); Serial.println(ret);
+
+	/* Save to SD card */
+	File file = SD.open(sd_measurements_filename, FILE_WRITE);
+	if (!file) {
+		Serial.println("Can't open file..");
+		return;
+	}
+
+    file.println(data);
+    file.close();
+
+
+//	bool ret = gprs.send_post(post_url, api_key, data);
+//	Serial.print("Success?: "); Serial.println(ret);
 }
 
 

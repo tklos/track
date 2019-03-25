@@ -17,5 +17,8 @@ extern const char *apn;
 extern const char *post_url;
 extern const char *api_key;
 
+extern const int sd_chip_select;
+extern const char *sd_measurements_filename;
+
 
 #endif
