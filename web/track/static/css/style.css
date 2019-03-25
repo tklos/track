@@ -323,3 +323,8 @@ div.ext-row-spacing {
 	height: 700px;
 }
 
+#map-checkbox {
+	margin: 0px 7px 4px 0px !important;
+	vertical-align: middle !important;
+}
+

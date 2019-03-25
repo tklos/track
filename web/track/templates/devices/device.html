@@ -81,6 +81,47 @@
 				info_window.open(map, this);
 			});
         }
+
+		/* Show markers panel */
+		var map_panel = document.createElement("div");
+		map_panel.style.backgroundColor = "#fff";
+		map_panel.style.borderRadius = "3px";
+		map_panel.style.height = "39px";
+		map_panel.style.display = "table-cell";
+		map_panel.style.marginTop = "10px";
+		map_panel.style.boxShadow = "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px";
+		map_panel.style.cursor = "pointer";
+		map_panel.index = 1;
+
+		var map_panel_inner = document.createElement("div");
+		map_panel_inner.style.color = "rgb(86, 86, 86)";
+		map_panel_inner.style.fontFamily = "Roboto,Arial,sans-serif";
+		map_panel_inner.style.fontSize = "15px";
+		map_panel_inner.style.fontWeight = "400";
+		map_panel_inner.style.paddingLeft = "12px";
+		map_panel_inner.style.paddingRight = "12px";
+		map_panel_inner.style.textAlign = 'center';
+		map_panel_inner.style.lineHeight = "39px";
+		<!--map_panel_inner.innerHTML = '<table style="margin: 10px 0px 10px 0px"><tr><td><input type="checkbox" id="map-checkbox" checked></td><td style="vertical-align: top">Show markers?</td></tr></table>';-->
+		map_panel_inner.innerHTML = '<input type="checkbox" id="map-checkbox" checked>Show markers?';
+		map_panel_inner.addEventListener("click", function(event) {
+			console.log(event);
+			var checkbox = document.getElementById("map-checkbox");
+			if (event.target != checkbox) {
+				checkbox.checked = !checkbox.checked;
+			}
+
+			var new_map = checkbox.checked ? map : null;
+			<!--if (checkbox.checked)-->
+				<!--new_map = map;-->
+
+			for (var i = 0; i < markers.length; i++)
+				markers[i].setMap(new_map);
+		});
+
+		map_panel.appendChild(map_panel_inner);
+
+		map.controls[google.maps.ControlPosition.TOP_CENTER].push(map_panel);
 	}
 </script>
 
