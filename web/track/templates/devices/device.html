@@ -32,11 +32,52 @@
 {% block end-body %}
 
 <script>
+	function calculate_map_bounds(points) {
+		var bounds = new google.maps.LatLngBounds();
+		for (var i = 0; i < points.length; i++)
+			bounds.extend(points[i]);
+
+		return bounds;
+	}
+
+
+	/* Taken from https://stackoverflow.com/a/13274361 */
+	function calculate_map_zoom(bounds, map_height, map_width) {
+		var WORLD_DIM = {height: 256, width: 256};
+		var ZOOM_MAX = 21;
+
+		function latRad(lat) {
+			var sin = Math.sin(lat * Math.PI / 180);
+			var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+			return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+		}
+
+		function zoom(mapPx, worldPx, fraction) {
+			return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
+		}
+
+		var ne = bounds.getNorthEast();
+		var sw = bounds.getSouthWest();
+
+		var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+
+		var lngDiff = ne.lng() - sw.lng();
+		var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+
+		var latZoom = zoom(map_height, WORLD_DIM.height, latFraction);
+		var lngZoom = zoom(map_width, WORLD_DIM.width, lngFraction);
+
+		return Math.max(Math.min(latZoom-1, lngZoom-1, ZOOM_MAX), 0);
+	}
+
+
 	function initMap() {
+		/* Measurements */
 		var gps_measurements = [
 			{% for m in gps_measurements %}[{{forloop.counter}},{{m.latitude}},{{m.longitude}},"{{m.date_collected|date:'Y-m-d H:i:s'}}"],{% endfor %}
 		];
 
+		/* Points */
 		var points = [];
 		for (var i = 0; i < gps_measurements.length; i++)
 			points.push({
@@ -44,9 +85,14 @@
 				lng: gps_measurements[i][2],
 			});
 
-		var map = new google.maps.Map(document.getElementById('map'), {
-			zoom: 7,
-			center: {lat: 42, lng: 13},
+		/* Map */
+		var map_div = document.getElementById("map");
+		var map_bounds = points.length > 0 ? calculate_map_bounds(points) : null;
+		map_div.style.height = "" + Math.floor(map_div.clientWidth * 0.62) + "px";
+
+		var map = new google.maps.Map(map_div, {
+			center: map_bounds ? map_bounds.getCenter() : new google.maps.LatLng(0, 0),
+			zoom: map_bounds ? calculate_map_zoom(map_bounds, map_div.clientHeight, map_div.clientWidth) : 0,
 		});
 
 		/* Path */
@@ -76,7 +122,7 @@
 		/* Info window */
 		var info_window = new google.maps.InfoWindow();
 		for (var i = 0; i < gps_measurements.length; i++) {
-			markers[i].addListener('click', function() {
+			markers[i].addListener("click", function() {
 				info_window.setContent(this.info_window_content);
 				info_window.open(map, this);
 			});
@@ -91,7 +137,7 @@
 		map_panel.style.marginTop = "10px";
 		map_panel.style.boxShadow = "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px";
 		map_panel.style.cursor = "pointer";
-		map_panel.index = 1;
+		map_panel.style.zIndex = "1";  // map_panel.index = -1 didn't work
 
 		var map_panel_inner = document.createElement("div");
 		map_panel_inner.style.color = "rgb(86, 86, 86)";
@@ -100,20 +146,17 @@
 		map_panel_inner.style.fontWeight = "400";
 		map_panel_inner.style.paddingLeft = "12px";
 		map_panel_inner.style.paddingRight = "12px";
-		map_panel_inner.style.textAlign = 'center';
+		map_panel_inner.style.textAlign = "center";
 		map_panel_inner.style.lineHeight = "39px";
 		<!--map_panel_inner.innerHTML = '<table style="margin: 10px 0px 10px 0px"><tr><td><input type="checkbox" id="map-checkbox" checked></td><td style="vertical-align: top">Show markers?</td></tr></table>';-->
 		map_panel_inner.innerHTML = '<input type="checkbox" id="map-checkbox" checked>Show markers?';
 		map_panel_inner.addEventListener("click", function(event) {
 			console.log(event);
 			var checkbox = document.getElementById("map-checkbox");
-			if (event.target != checkbox) {
+			if (event.target != checkbox)
 				checkbox.checked = !checkbox.checked;
-			}
 
 			var new_map = checkbox.checked ? map : null;
-			<!--if (checkbox.checked)-->
-				<!--new_map = map;-->
 
 			for (var i = 0; i < markers.length; i++)
 				markers[i].setMap(new_map);
