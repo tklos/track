@@ -16,7 +16,7 @@
 	<a class="btn-data-download" href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
 
 	<div class="div-ajax">
-		{% include "devices/device_gps_measurements.html" with gps_measurements=table_gps_measurements gps_measurements_ids=table_gps_measurements_ids extra=extra only %}
+		{% include "devices/device_gps_measurements.html" with table_gps_measurements=table_gps_measurements table_gps_measurements_ids=table_gps_measurements_ids extra=extra only %}
 	</div>
 
 
