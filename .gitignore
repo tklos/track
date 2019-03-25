@@ -2,8 +2,7 @@
 *.pyc
 __pycache__/
 
-/arduino/track/settings.*
-!/arduino/track/settings.*.template
+/arduino/track/settings.cpp
 
 /web/env/
 

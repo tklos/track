@@ -13,7 +13,7 @@ Gprs gprs = Gprs(serial_gprs, 9600, apn, true);
 
 SdLog sdlog = SdLog(sd_log_filename);
 
-Metro metro_gps = Metro(INTERVAL_GPS);
+Metro metro_gps = Metro(interval_gps);
 Metro metro_gprs = Metro(30000);
 
 
@@ -43,7 +43,7 @@ void metro_loop_gps() {
 		if (gps.date.isValid() && gps.time.isValid() && gps.location.isValid())
 			break;
 
-		if (millis() - start_time > TIMEOUT_GPS_GET_DATA)
+		if (millis() - start_time > timeout_gps_get_data)
 			return;
 
 		if (!serial_gps->available())
