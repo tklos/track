@@ -14,7 +14,7 @@ Gprs gprs = Gprs(serial_gprs, 9600, apn, true);
 SdLog sdlog = SdLog(sd_log_filename);
 
 Metro metro_gps = Metro(interval_gps);
-Metro metro_gprs = Metro(30000);
+Metro metro_gprs = Metro(interval_gprs);
 
 
 
@@ -29,13 +29,18 @@ void setup() {
 		Serial.println("Can't initialise SD card");
 		while (1) ;
 	}
+
+	metro_gps.reset();
+	delay(1);  // make sure GPRS is run after GPS
+	metro_gprs.reset();
 }
+
 
 
 void metro_loop_gps() {
 	unsigned long start_time = millis();
 
-	sdlog.log("\n"); sdlog.log_time(start_time); sdlog.log(" GPS");
+	Serial.println("\nGPS"); sdlog.log("\n"); sdlog.log_time(start_time); sdlog.log(" GPS");
 
 	TinyGPSPlus gps;
 
@@ -63,35 +68,63 @@ void metro_loop_gps() {
 			int(lng), (long)((lng - (int)lng) * 1000000),
 			gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second());
 
-	Serial.println(data);
-	sdlog.log(data);
+	Serial.println(data); sdlog.log(data);
 
 
 	/* Save to SD card */
-	File file = SD.open(sd_measurements_filename, FILE_WRITE);
-	if (!file) {
-		Serial.println("Can't open file..");
+	sd_write_to_file(sd_measurements_filename, data);
+	sd_write_to_file(sd_to_send_filename, data);
+}
+
+
+
+void metro_loop_gprs() {
+	bool ret;
+	unsigned long start_time = millis();
+
+	Serial.println("\nSEND"); sdlog.log("\n"); sdlog.log_time(start_time); sdlog.log(" SEND");
+
+
+	/* Read data to send */
+	char data[90];
+	ret = sd_read_first_copy_rest(sd_to_send_filename, data, sd_tmp_filename);
+	if (!ret) {
+		Serial.println("Nothing to send"); sdlog.log("Nothing to send");
 		return;
 	}
 
-    file.println(data);
-    file.close();
 
-//	bool ret = gprs.send_post(post_url, api_key, data);
-//	Serial.print("Success?: "); Serial.println(ret);
+	/* Send data */
+	Serial.println(data);
+	sdlog.log("Sending ", false); sdlog.log(data);
+
+	ret = gprs.send_post(post_url, api_key, data);
+	if (!ret) {
+		Serial.println("Failed"); sdlog.log("Failed");
+		return;
+	}
+
+
+	/* Copy file with records to send */
+	ret = sd_copy_file(sd_tmp_filename, sd_to_send_filename);
+	if (!ret) {
+		Serial.println("Copy failed"); sdlog.log("Copy failed");
+		return;
+	}
+
+
+	char buf[50];
+	int length = millis() - start_time;
+	sprintf(buf, "Finished %d", length);
+	Serial.println(buf); sdlog.log(buf);
 }
+
 
 
 void loop() {
 	if (metro_gps.check())
 		metro_loop_gps();
 
-//	if (metro_gprs.check()) {
-//		int begin = millis();
-//		bool ret = gprs.send_post(post_url, api_key, "{\"lat\": 1.5554, \"long\": 6.55, \"date\": \"2212\"}");
-//		Serial.print("Success?: "); Serial.println(ret);
-//		int length = millis() - begin;
-//
-//		Serial.println(length);
-//	}
+	if (metro_gprs.check())
+		metro_loop_gprs();
 }

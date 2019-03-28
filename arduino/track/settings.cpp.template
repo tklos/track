@@ -4,7 +4,8 @@
 HardwareSerial *serial_gprs = &Serial1;
 HardwareSerial *serial_gps = &Serial2;
 
-const unsigned long interval_gps = 20000;
+const unsigned long interval_gps = 30000;
+const unsigned long interval_gprs = 30000;
 
 const unsigned long timeout_gps_get_data = 3000;
 
@@ -15,4 +16,7 @@ const char *api_key = "(api-key)";
 
 const int sd_chip_select = 53;
 const char *sd_measurements_filename = "measmnts.txt";
+const char *sd_to_send_filename = "to_send.txt";
+const char *sd_tmp_filename = "tmp.txt";
+
 const char *sd_log_filename = "log.txt";
