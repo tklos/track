@@ -6,6 +6,14 @@
 
 
 
+void sd_write_to_file(const char *filename, const char *data);
+
+bool sd_copy_file(const char *in_filename, const char *out_filename);
+
+bool sd_read_first_copy_rest(const char *in_filename, char *data, const char *out_filename);
+
+
+
 class SdLog {
 	public:
 

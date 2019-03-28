@@ -181,8 +181,10 @@ bool Gprs::send_post(const char *post_url, const char *api_key, const char *data
 		/* Maybe bearer is already open? */
 		if (!send_cmd_return(CMD_BEARER_CHECK, buf))
 			return false;
-		if (strncmp(buf, "+SAPBR: 1,1,", 12))
+		if (strncmp(buf, "+SAPBR: 1,1,", 12)) {
+			status = 0;
 			return false;
+		}
 	}
 
 	/* AT+HTTPINIT */
