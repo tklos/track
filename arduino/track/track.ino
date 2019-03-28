@@ -78,7 +78,7 @@ void metro_loop_gps() {
 
 
 
-void metro_loop_gprs() {
+bool gprs_send_single_record() {
 	bool ret;
 	unsigned long start_time = millis();
 
@@ -90,7 +90,7 @@ void metro_loop_gprs() {
 	ret = sd_read_first_copy_rest(sd_to_send_filename, data, sd_tmp_filename);
 	if (!ret) {
 		Serial.println("Nothing to send"); sdlog.log("Nothing to send");
-		return;
+		return false;
 	}
 
 
@@ -101,7 +101,7 @@ void metro_loop_gprs() {
 	ret = gprs.send_post(post_url, api_key, data);
 	if (!ret) {
 		Serial.println("Failed"); sdlog.log("Failed");
-		return;
+		return false;
 	}
 
 
@@ -109,7 +109,7 @@ void metro_loop_gprs() {
 	ret = sd_copy_file(sd_tmp_filename, sd_to_send_filename);
 	if (!ret) {
 		Serial.println("Copy failed"); sdlog.log("Copy failed");
-		return;
+		return false;
 	}
 
 
@@ -117,6 +117,18 @@ void metro_loop_gprs() {
 	int length = millis() - start_time;
 	sprintf(buf, "Finished %d", length);
 	Serial.println(buf); sdlog.log(buf);
+
+	return true;
+}
+
+
+
+void metro_loop_gprs() {
+	for (int num_sent = 0; num_sent < gprs_max_records_to_send; num_sent++) {
+		bool ret = gprs_send_single_record();
+		if (!ret)
+			break;
+	}
 }
 
 
