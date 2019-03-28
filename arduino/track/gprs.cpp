@@ -18,8 +18,15 @@ void Gprs::send_cmd(const char *cmd) {
 }
 
 
+bool is_whitespace(char c) {
+	return c == 0 || c == 10 || c == 13 || c == ' ';
+}
+
+
 bool Gprs::read_ret_data(unsigned int cmdlen, char *buf, unsigned int timeout, bool cmd_resent) {
 	unsigned long start_time = millis();
+
+	cmdlen = min(cmdlen, 60);
 
 	int state = STATE_READ_INITIAL;
 	int total_read = 0, buflen = 0;
@@ -40,7 +47,7 @@ bool Gprs::read_ret_data(unsigned int cmdlen, char *buf, unsigned int timeout, b
 
 		char c;
 		bool read_new = true;
-		while (serial->available()) {
+		while (!read_new || serial->available()) {
 			if (read_new) {
 				c = serial->read();
 //				Serial.print(state); Serial.print(": "); Serial.print((int)c); Serial.print(" -> "); Serial.println(c);
@@ -49,7 +56,7 @@ bool Gprs::read_ret_data(unsigned int cmdlen, char *buf, unsigned int timeout, b
 			read_new = true;
 			switch (state) {
 				case STATE_READ_INITIAL:
-					if (c == 0 || c == 10 || c == 13)
+					if (is_whitespace(c))
 						break;
 
 					state = cmd_resent ? STATE_READ_CMD : STATE_READ_RESPONSE;
@@ -58,7 +65,7 @@ bool Gprs::read_ret_data(unsigned int cmdlen, char *buf, unsigned int timeout, b
 
 				case STATE_READ_CMD:
 					total_read++;
-					if (total_read <= cmdlen)
+					if (total_read <= cmdlen || !is_whitespace(c))
 						break;
 
 					state = STATE_READ_BEFORE_RESPONSE;
@@ -66,7 +73,7 @@ bool Gprs::read_ret_data(unsigned int cmdlen, char *buf, unsigned int timeout, b
 					break;
 
 				case STATE_READ_BEFORE_RESPONSE:
-					if (c == 0 || c == 10 || c == 13)
+					if (is_whitespace(c))
 						break;
 
 					state = STATE_READ_RESPONSE;
@@ -222,7 +229,7 @@ bool Gprs::send_post(const char *post_url, const char *api_key, const char *data
 		return false;
 	}
 
-	if (!send_cmd_check_ok(data, TIMEOUT_CMD_HTTP_SET_PARA_CONTENT, false)) {
+	if (!send_cmd_check_ok(data, TIMEOUT_CMD_HTTP_SET_PARA_CONTENT)) {
 		send_cleanup_cmds();
 		return false;
 	}
@@ -232,7 +239,7 @@ bool Gprs::send_post(const char *post_url, const char *api_key, const char *data
 		send_cleanup_cmds();
 		return false;
 	}
-	const char *http_action_response_prefix = "+HTTPACTION: ";
+	const char *http_action_response_prefix = "+HTTPACTION:";
 	if (strstr(buf, http_action_response_prefix) == NULL)
 		if (!read_ret_data(strlen(http_action_response_prefix), buf, TIMEOUT_CMD_HTTP_SET_ACTION, true)) {
 			send_cleanup_cmds();
