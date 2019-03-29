@@ -1,6 +1,8 @@
 #include "settings.h"
 
 
+const bool debug_gprs = true;
+
 HardwareSerial *serial_gprs = &Serial1;
 HardwareSerial *serial_gps = &Serial2;
 
