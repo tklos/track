@@ -4,6 +4,8 @@
 #include <Arduino.h>
 
 
+extern const bool debug_gprs;
+
 extern HardwareSerial *serial_gprs;
 extern HardwareSerial *serial_gps;
 

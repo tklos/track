@@ -1,3 +1,7 @@
+/*
+ * https://github.com/tklos/track
+*/
+
 #include <Metro.h>
 #include <TinyGPS++.h>
 #include <SD.h>
@@ -9,7 +13,7 @@
 #define DELAY_INITIAL 2000
 
 
-Gprs gprs = Gprs(serial_gprs, 9600, apn, true);
+Gprs gprs = Gprs(serial_gprs, 9600, apn, debug_gprs);
 
 SdLog sdlog = SdLog(sd_log_filename);
 

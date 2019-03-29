@@ -1,6 +1,8 @@
 #include "settings.h"
 
 
+const bool debug_gprs = true;
+
 HardwareSerial *serial_gprs = &Serial1;
 HardwareSerial *serial_gps = &Serial2;
 
@@ -11,7 +13,7 @@ const unsigned long timeout_gps_get_data = 3000;
 
 const char *apn = "(apn)";
 
-const char *post_url = "track.kupa.usermd.net/api/measurements/";
+const char *post_url = "(url)";
 const char *api_key = "(api-key)";
 
 const int gprs_max_records_to_send = 3;
