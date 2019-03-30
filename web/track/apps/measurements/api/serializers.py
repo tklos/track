@@ -27,10 +27,12 @@ class GpsMeasurementSerializer(serializers.Serializer):
         return datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
 
     def create(self, validated_data):
-        return GpsMeasurement.objects.create(
+        obj, created = GpsMeasurement.objects.get_or_create(
             device=self.context['device'],
             latitude=validated_data['lat'],
             longitude=validated_data['long'],
             date_collected=validated_data['date'],
         )
+
+        return obj
 

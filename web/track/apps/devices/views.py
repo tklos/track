@@ -5,9 +5,9 @@ import random
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView, CreateView, DetailView, DeleteView
 from django.views.generic.detail import BaseDetailView
@@ -101,12 +101,37 @@ class DeviceDeleteView(DeleteView):
     def get_object(self, queryset=None):
         return get_object_or_404(Device.objects, user=self.request.user, sequence_id=self.kwargs['d_sid'])
 
+    def get(self, request, *args, **kwargs):
+        raise NotImplementedError()
+
     def post(self, request, *args, **kwargs):
         ret = super().post(request, *args, **kwargs)
 
         messages.success(self.request, 'Device {} deleted'.format(self.object.name))
 
         return ret
+
+
+class DeviceDataDeleteView(DeleteView):
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device.objects, user=self.request.user, sequence_id=self.kwargs['d_sid'])
+
+    def get_success_url(self):
+        return reverse('devices:device', kwargs=self.kwargs)
+
+    def get(self, request, *args, **kwargs):
+        raise NotImplementedError()
+
+    def delete(self, request, *args, **kwargs):
+        object = self.get_object()
+        success_url = self.get_success_url()
+
+        object.gps_measurement_set.all().delete()
+
+        messages.success(self.request, 'Data deleted')
+
+        return HttpResponseRedirect(success_url)
 
 
 class DeviceDownloadCsvView(BaseDetailView):
