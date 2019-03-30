@@ -34,6 +34,34 @@
 		</div>
 	</div>
 
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#device-delete-data-modal">
+		Delete data
+	</button>
+	<div id="device-delete-data-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Delete data</h4>
+				</div>
+				<div class="modal-body">
+					Are you sure?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						Cancel
+					</button>
+					<button type="button" class="btn btn-danger device-delete" data-dismiss="modal">
+						Delete data
+					</button>
+					<form method="post" action="{% url 'devices:data-delete' d_sid=object.sequence_id %}">
+						{% csrf_token %}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 <h2>Data</h2>
 	<a class="btn-data-download" href="{% url 'devices:download-csv' d_sid=object.sequence_id %}">Download</a>
