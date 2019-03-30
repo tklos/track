@@ -26,5 +26,15 @@ $(document).ready(function() {
 		});
 	});
 
+
+	/* Device delete buttons */
+	$("button.device-delete").click(function(event) {
+		var obj = $(this);
+		var form = obj.siblings("form").first();
+
+		form.submit();
+	});
+
+
 });
 
