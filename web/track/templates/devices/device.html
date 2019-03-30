@@ -118,7 +118,7 @@
 		var latZoom = zoom(map_height, WORLD_DIM.height, latFraction);
 		var lngZoom = zoom(map_width, WORLD_DIM.width, lngFraction);
 
-		return Math.max(Math.min(latZoom-1, lngZoom-1, ZOOM_MAX), 0);
+		return Math.max(Math.min(latZoom, lngZoom, ZOOM_MAX), 0);
 	}
 
 
