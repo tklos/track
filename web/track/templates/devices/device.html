@@ -111,12 +111,14 @@
 				new google.maps.Marker({
 					position: points[i],
 					info_window_content: "#" + gps_measurements[i][0] + ": " + gps_measurements[i][3],
-					map: map,
+					map: null,
 				})
 			);
 		if (markers.length >= 2) {
 			markers[0].setLabel("S");
 			markers[markers.length-1].setLabel("E");
+			markers[0].setMap(map);
+			markers[markers.length-1].setMap(map);
 		}
 
 		/* Info window */
@@ -149,7 +151,7 @@
 		map_panel_inner.style.textAlign = "center";
 		map_panel_inner.style.lineHeight = "39px";
 		<!--map_panel_inner.innerHTML = '<table style="margin: 10px 0px 10px 0px"><tr><td><input type="checkbox" id="map-checkbox" checked></td><td style="vertical-align: top">Show markers?</td></tr></table>';-->
-		map_panel_inner.innerHTML = '<input type="checkbox" id="map-checkbox" checked>Show markers?';
+		map_panel_inner.innerHTML = '<input type="checkbox" id="map-checkbox">Show markers?';
 		map_panel_inner.addEventListener("click", function(event) {
 			console.log(event);
 			var checkbox = document.getElementById("map-checkbox");
@@ -158,7 +160,7 @@
 
 			var new_map = checkbox.checked ? map : null;
 
-			for (var i = 0; i < markers.length; i++)
+			for (var i = 1; i < markers.length-1; i++)
 				markers[i].setMap(new_map);
 		});
 
